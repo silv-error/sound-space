@@ -1,0 +1,150 @@
+body{
+    background-color: #121212;
+}
+
+#nav_container{
+    margin-top: 12px;
+}
+
+#logo_container{
+    margin-left: 80px;
+}
+
+#logo_container h1{
+    color: #FFFFFF;
+    font-size: 32px;
+    font-family: 'jsMath-cmbx10';
+}
+
+#logo2{
+    padding-left: 56px;
+}
+
+#search{
+    width: max-content;
+    height: max-content;
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-radius: 100px;
+    background-color: #FFFFFF;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 12px;
+}
+
+#search_icon{
+    color: #787070;
+}
+
+#search_input{
+    font-size: 16px;
+    font-weight: bold;
+    color: #787070;
+    margin-left: 8px;
+    outline: none;
+    border: none;
+    background: transparent;
+    width: 400px;
+    height: 24px;
+}
+
+#search_input::placeholder{
+    text-align: center;
+}
+
+#login_container{
+    margin-top: 24px;
+    margin-left: 112px;
+}
+
+#login_container button{
+    font-size: 16px;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    border-radius: 24px;
+    width: 80px;
+    height: 32px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#lg_btn{
+    color: #000000;
+    background-color: #FFFFFF;
+}
+
+#menu{
+    margin-top: 32px;
+    margin-left: 336px;
+}
+
+#menu_container button{
+    font-size: 16px;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    border-radius: 16px;
+    width: 144px;
+    height: 40px;
+    text-align: center;
+    font-weight: bold;
+    background-color: #212121;
+    color: #909090;
+}
+
+#wrapped_btn{
+    color: #000000 !important;
+    background-color: #D9D9D9 !important;
+}
+
+#main_content{
+    background-image: linear-gradient(#212121, #535353);
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 12px;
+    border-radius: 16px;
+}
+
+.wrap_title{
+    font-size: 24px;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding-left: 40px;
+    padding-top: 24px;
+}
+
+.wrap_year{
+    color: #24FF7F;
+}
+
+.music_container{
+    margin-top: 48px;
+    margin-bottom: 40px;
+}
+
+.artist_container{
+    margin-left: auto;
+    margin-right: auto;
+    width: 320px;
+}
+
+.music_artist{
+    width: 304px;
+    height: 168px;
+    border-radius: 10px;
+    object-fit: cover;
+    object-position: 50% 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.music_title{
+    color: #FFFFFF;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 12px;
+}
