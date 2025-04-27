@@ -6,6 +6,12 @@ from dotenv import load_dotenv
 import os
 from flask import Flask, request, redirect, render_template, url_for
 
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+import time
+
 app = Flask(__name__)
 
 load_dotenv()
@@ -65,6 +71,9 @@ class SpotifyApi:
                 
                 json_result = json.loads(result.content)
                 
+                print("working here...")
+                print(json_result)
+                
                 if "artists" not in json_result or not json_result["artists"]["items"]:
                     print("Artist name does not exist...")
                     return None
@@ -114,10 +123,24 @@ class SpotifyApi:
                 print("Span element not found.")
         else:
             print("Div element not found.")
+            
+    def convert_milliseconds_to_string(self, milliseconds):
+        # Convert milliseconds to seconds
+        seconds = milliseconds / 1000
+        
+        # Calculate hours, minutes, and remaining seconds
+        hours = int(seconds // 3600)
+        minutes = int((seconds % 3600) // 60)
+        remaining_seconds = int(seconds % 60)
+        
+        # Return formatted string
+        return f"{hours}h {minutes}m {remaining_seconds}s"
 
     def get_songs_by_artist(self, artist_id):
         url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks?country=PH"
         headers = self.get_auth_header()
+        
+        output = []
         
         result = get(url, headers=headers)
         
@@ -126,8 +149,17 @@ class SpotifyApi:
             return None
         
         json_result = json.loads(result.content)
+        print(json_result)
 
-        return json_result["tracks"]
+        data = json_result["tracks"]
+        
+        for song in data[:7]:
+            output.append({
+                "name": song["name"],
+                "duration_ms": self.convert_milliseconds_to_string(song["duration_ms"])
+            })
+        
+        return output
     
     def get_song_duration_and_listeners(self, artist_id):
         url = f"https://open.spotify.com/artist/{artist_id}"
@@ -136,7 +168,7 @@ class SpotifyApi:
         songs = self.get_songs_by_artist(artist_id)
 
         if response.status_code == 200:
-            soup = BeautifulSoup(response.content, 'html.parser')
+            soup = BeautifulSoup(response.text, 'html.parser')
             
             spans = soup.find_all('span', class_='Hj3ST6Lg66UEtynHfOT8')
             paragraphs = soup.find_all('p', class_='e-9640-text encore-text-body-small encore-internal-color-text-subdued ListRowDetails__ListRowDetailText-sc-sozu4l-0 hxCObm')
@@ -240,7 +272,7 @@ class SpotifyApi:
         track_info_list = []
         seen_tracks = set()  # Set to keep track of seen track IDs
 
-        for track in recently_played_tracks[:5]:
+        for track in recently_played_tracks[:12]:
             track_name = track['track']['name']
             track_id = track['track']['id']
             album_image = track['track']['album']['images'][0]['url'] if track['track']['album']['images'] else None
@@ -316,7 +348,6 @@ class SpotifyApi:
                         'src': img_element['src'],
                         'text': span.get_text(strip=True)
                     })
-            
             return results
         else:
             print(f"Failed to retrieve content. Status code: {response.status_code}")
@@ -484,7 +515,7 @@ def home():
         if current_artist_id and artist_data is None:
             artist_id = current_artist_id
             
-            songs = spotify_api.get_song_duration_and_listeners(artist_id)
+            songs = spotify_api.get_songs_by_artist(artist_id)
             following_artist = spotify_api.if_following_artist(artist_id)
             
             artist = {
@@ -498,7 +529,7 @@ def home():
             artist_id = artist_data["id"]
         
         if artist_data is not None:
-            songs = spotify_api.get_song_duration_and_listeners(artist_id)
+            songs = spotify_api.get_songs_by_artist(artist_id)
             following_artist = spotify_api.if_following_artist(artist_id)
             
             artist = {
@@ -509,7 +540,7 @@ def home():
                 "monthly_listeners": spotify_api.get_artist_monthly_listeners(artist_data["id"])
             }
         
-        return render_template('home.html', artist_id=artist_id, artist=artist, songs=songs, followed_artists=followed_artists, following_artist=following_artist, popular_artist=popular_artist, top_recently_played_songs=top_recently_played_songs, recentlyPlayedTracks=recentlyPlayedTracks, albums=albums)
+        return render_template('home.html',artist_data=artist_data, artist_id=artist_id, artist=artist, songs=songs, followed_artists=followed_artists, following_artist=following_artist, popular_artist=popular_artist, top_recently_played_songs=top_recently_played_songs, recentlyPlayedTracks=recentlyPlayedTracks, albums=albums)
     return redirect('/')
 
 @app.route('/wrapped')

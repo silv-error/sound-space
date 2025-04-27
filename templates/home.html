@@ -98,27 +98,10 @@
                                     <div class="row g-0">
                                         <div class="col-12 music_container">
                                             <div class="row g-0">
-                                                {% for track in recentlyPlayedTracks[:4] %}
+                                                {% for track in recentlyPlayedTracks[:12] %}
                                                     <div class="col-2 artist_container">
                                                         <img src="{{ track.image }}" alt="artist" class="music_artist">
                                                         <p class="music_title">{{ track.name }}</p>
-                                                    </div>
-                                                {% endfor %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <h1 class="wrap_title">Today's Biggest Hits</h1>
-                                </div>
-                                <div class="col-12">
-                                    <div class="row g-0">
-                                        <div class="col-12 music_container">
-                                            <div class="row g-0">
-                                                {% for artist in popular_artist %}
-                                                    <div class="col-2 artist_container">
-                                                        <img src="{{ artist.src }}" alt="artist" class="music_artist">
-                                                        <p class="music_title">{{ artist.text }}</p>
                                                     </div>
                                                 {% endfor %}
                                             </div>
@@ -157,7 +140,7 @@
                                         <div id="srch_artist_container">
                                             {% if artist.name %}
                                                 <h1 id="srch_artist_name">{{ artist.name }}</h1>
-                                                <p id="listeners">{{ artist.monthly_listeners }}</p>
+                                                <p id="listeners">{{ artist_data.followers }}</p>
                                                 {% if artist_id %}
                                                     {% if not following_artist %}
                                                         <div>
@@ -204,10 +187,10 @@
                                                                 <p class="song_details">{{ loop.index }}</p>
                                                             </div>
                                                             <div class="col-4">
-                                                                <p class="song_details">{{ song["title"]}} </p>
+                                                                <p class="song_details">{{ song["name"]}} </p>
                                                             </div>
                                                             <div class="col-3">
-                                                                <p class="song_details">{{ song.duration }}</p>
+                                                                <p class="song_details">{{ song.duration_ms }}</p>
                                                             </div>
                                                             <div class="col-4">
                                                                 <p class="song_details">{{ song.plays }}</p>

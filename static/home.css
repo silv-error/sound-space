@@ -168,6 +168,10 @@ body{
 .music_container{
     margin-top: 48px;
     margin-bottom: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 24px;
+    column-gap: 24px;
 }
 
 .artist_container{
